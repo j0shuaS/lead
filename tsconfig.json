@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["api", "middleware.ts", "server/src"]
+  "include": ["middleware.ts", "server/src"]
 }
