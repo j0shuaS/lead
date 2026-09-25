@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { GooglePlacesError, MAX_RADIUS_METERS, searchPlaces } from "../services/googlePlaces.js";
-import type { SearchCircle } from "../types.js";
+import { GooglePlacesError, MAX_RADIUS_METERS, searchPlaces } from "../services/googlePlaces";
+import type { SearchCircle } from "../types";
 
 export const searchRouter = Router();
 

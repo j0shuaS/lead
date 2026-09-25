@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import type { WebsiteQualityResult, WebsiteQualityStatus } from "../types.js";
+import type { WebsiteQualityResult, WebsiteQualityStatus } from "../types";
 
 const FETCH_TIMEOUT_MS = 5000;
 

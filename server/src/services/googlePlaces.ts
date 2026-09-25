@@ -4,7 +4,7 @@ import type {
   GooglePlacesSearchResponse,
   LeadResult,
   SearchCircle,
-} from "../types.js";
+} from "../types";
 
 const PLACES_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
 

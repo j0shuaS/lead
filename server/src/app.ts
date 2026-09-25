@@ -1,7 +1,7 @@
 import cors from "cors";
 import express, { type Express } from "express";
-import { qualityRouter } from "./routes/quality.js";
-import { searchRouter } from "./routes/search.js";
+import { qualityRouter } from "./routes/quality";
+import { searchRouter } from "./routes/search";
 
 // Builds the Express app without starting a server. server/src/index.ts
 // calls this and .listen()s on it for local dev; api/index.ts (the Vercel

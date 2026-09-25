@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { checkWebsiteQualityBatch } from "../services/websiteQuality.js";
+import { checkWebsiteQualityBatch } from "../services/websiteQuality";
 
 export const qualityRouter = Router();
 
