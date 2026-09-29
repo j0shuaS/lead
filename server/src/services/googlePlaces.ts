@@ -1,11 +1,3 @@
-import type {
-  GooglePlace,
-  GooglePlacesErrorResponse,
-  GooglePlacesSearchResponse,
-  LeadResult,
-  SearchCircle,
-} from "../types";
-
 const PLACES_SEARCH_URL = "https://places.googleapis.com/v1/places:searchText";
 
 // Only ask Google for the fields LEAD actually displays. This keeps each
@@ -29,9 +21,9 @@ const FIELD_MASK = [
 const PAGE_SIZE = 20;
 
 // Google caps locationRestriction/locationBias circles at 50km.
-export const MAX_RADIUS_METERS = 50000;
+const MAX_RADIUS_METERS = 50000;
 
-export class GooglePlacesError extends Error {
+class GooglePlacesError extends Error {
   status: number;
   constructor(message: string, status = 502) {
     super(message);
@@ -46,7 +38,7 @@ export class GooglePlacesError extends Error {
 // isn't necessary here and Google's docs note that an explicit location in
 // textQuery can override locationBias anyway — locationRestriction avoids
 // that ambiguity entirely.
-function buildTextQuery(location: string, businessType?: string, circle?: SearchCircle): string {
+function buildTextQuery(location: string, businessType?: string, circle?: any): string {
   const trimmedType = businessType?.trim();
   if (circle) {
     return trimmedType || "businesses";
@@ -57,7 +49,7 @@ function buildTextQuery(location: string, businessType?: string, circle?: Search
     : `businesses in ${trimmedLocation}`;
 }
 
-function toLeadResult(place: GooglePlace, fallbackCategory: string): LeadResult {
+function toLeadResult(place: any, fallbackCategory: string): any {
   const websiteUri = place.websiteUri?.trim() || null;
   return {
     id: place.id,
@@ -74,11 +66,11 @@ function toLeadResult(place: GooglePlace, fallbackCategory: string): LeadResult 
   };
 }
 
-export async function searchPlaces(
+async function searchPlaces(
   location: string,
   businessType?: string,
-  circle?: SearchCircle
-): Promise<LeadResult[]> {
+  circle?: any
+): Promise<any[]> {
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
   if (!apiKey) {
     throw new GooglePlacesError(
@@ -96,11 +88,6 @@ export async function searchPlaces(
   };
 
   if (circle) {
-    // Text Search's locationRestriction only accepts a rectangular
-    // viewport — a circle is only valid inside locationBias. Google's
-    // docs warn that an explicit location *name* in textQuery can override
-    // locationBias, but our circle-mode textQuery never includes one (see
-    // buildTextQuery above), so that override risk doesn't apply here.
     requestBody.locationBias = {
       circle: {
         center: { latitude: circle.lat, longitude: circle.lng },
@@ -131,7 +118,7 @@ export async function searchPlaces(
     let message = `Google Places API request failed (HTTP ${response.status}).`;
     let googleStatus: string | undefined;
     try {
-      const errorBody = (await response.json()) as GooglePlacesErrorResponse;
+      const errorBody = (await response.json()) as any;
       if (errorBody.error?.message) {
         message = errorBody.error.message;
       }
@@ -140,17 +127,14 @@ export async function searchPlaces(
       // Response body wasn't JSON; fall back to the generic message above.
     }
 
-    // Log the full picture server-side (visible in the `npm run dev`
-    // terminal) even though the HTTP status we return to the browser is
-    // simplified — this is what to check first when a search fails.
+    // Log the full picture server-side (visible in Vercel logs) even
+    // though the HTTP status we return to the browser is simplified.
     console.error(
       `[LEAD] Google Places API error: HTTP ${response.status}${
         googleStatus ? ` (${googleStatus})` : ""
       } — ${message}`
     );
 
-    // Surface the most common setup mistakes clearly, since this is
-    // likely the first time this key has been used against this API.
     if (response.status === 403) {
       message +=
         " This usually means the 'Places API (New)' is not enabled for your project, or the API key is restricted from calling it. Check Google Cloud Console > APIs & Services.";
@@ -159,16 +143,13 @@ export async function searchPlaces(
       message += " Check that the location, business type, and map radius look like a valid search.";
     }
 
-    // Pass through Google's actual status where it's meaningful (400 =
-    // bad request from us, 403 = auth/config problem) instead of always
-    // reporting 502, so the browser's network tab reflects the real cause.
     const statusToReport = response.status === 400 ? 400 : 502;
     throw new GooglePlacesError(message, statusToReport);
   }
 
-  const data = (await response.json()) as GooglePlacesSearchResponse;
+  const data = (await response.json()) as any;
   const places = data.places ?? [];
-  return places.map((place) => toLeadResult(place, fallbackCategory));
+  return places.map((place: any) => toLeadResult(place, fallbackCategory));
 }
 
 module.exports = { MAX_RADIUS_METERS, GooglePlacesError, searchPlaces };

@@ -1,11 +1,9 @@
-import type { SearchCircle } from "../types";
-
 const { Router } = require("express");
 const { GooglePlacesError, MAX_RADIUS_METERS, searchPlaces } = require("../services/googlePlaces");
 
-export const searchRouter = Router();
+const searchRouter = Router();
 
-function parseCircle(req: any): SearchCircle | null {
+function parseCircle(req: any): any {
   const { lat, lng, radiusMeters } = req.query;
   if (typeof lat !== "string" || typeof lng !== "string" || typeof radiusMeters !== "string") {
     return null;
