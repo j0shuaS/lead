@@ -4,7 +4,7 @@ const cors = require("cors");
 const express = require("express");
 const { searchRouter } = require("./routes/search");
 
-export function createApp(): Express {
+function createApp(): Express {
   const app = express();
 
   app.use(cors());
