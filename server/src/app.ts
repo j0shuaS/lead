@@ -1,24 +1,22 @@
-import cors from "cors";
-import express, { type Express } from "express";
-import { qualityRouter } from "./routes/quality";
-import { searchRouter } from "./routes/search";
+import type { Express } from "express";
 
-// Builds the Express app without starting a server. server/src/index.ts
-// calls this and .listen()s on it for local dev; api/index.ts (the Vercel
-// serverless function) calls this and exports the app directly instead —
-// Vercel hands it requests itself, no port needed.
+const cors = require("cors");
+const express = require("express");
+const { searchRouter } = require("./routes/search");
+
 export function createApp(): Express {
   const app = express();
 
   app.use(cors());
   app.use(express.json());
 
-  app.get("/api/health", (_req, res) => {
+  app.get("/api/health", (_req: any, res: any) => {
     res.json({ ok: true, hasApiKey: Boolean(process.env.GOOGLE_MAPS_API_KEY) });
   });
 
   app.use("/api", searchRouter);
-  app.use("/api", qualityRouter);
 
   return app;
 }
+
+module.exports = { createApp };

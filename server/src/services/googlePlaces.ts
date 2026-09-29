@@ -170,3 +170,5 @@ export async function searchPlaces(
   const places = data.places ?? [];
   return places.map((place) => toLeadResult(place, fallbackCategory));
 }
+
+module.exports = { MAX_RADIUS_METERS, GooglePlacesError, searchPlaces };
