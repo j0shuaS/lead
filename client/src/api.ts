@@ -1,5 +1,6 @@
 import type {
   ApiErrorBody,
+  PitchResult,
   SearchCircle,
   SearchResponse,
   TrackedLead,
@@ -50,4 +51,13 @@ export async function checkWebsiteQuality(
   });
   const body = await parseOrThrow<{ results: WebsiteQualityResult[] }>(response);
   return body.results;
+}
+
+export async function generatePitch(url: string): Promise<PitchResult> {
+  const response = await fetch("/api/pitch", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url }),
+  });
+  return parseOrThrow<PitchResult>(response);
 }

@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { checkWebsiteQuality, searchLeads } from "./api";
+import { PitchGenerator } from "./components/PitchGenerator";
 import { ResultsList } from "./components/ResultsList";
 import { SearchForm } from "./components/SearchForm";
 import type { LeadFilter, LeadStatus, SearchCircle, TrackedLead } from "./types";
 
 type Status = "idle" | "loading" | "error" | "success";
+type Tab = "leads" | "pitch";
 
 export default function App() {
+  const [tab, setTab] = useState<Tab>("leads");
   const [status, setStatus] = useState<Status>("idle");
   const [results, setResults] = useState<TrackedLead[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -62,6 +65,11 @@ export default function App() {
     );
   }
 
+  const tabButtonClass = (isActive: boolean) =>
+    isActive
+      ? "border-b-2 border-ink px-1 pb-3 text-sm font-medium text-ink"
+      : "border-b-2 border-transparent px-1 pb-3 text-sm text-ink-soft transition-colors hover:text-ink";
+
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-6xl px-6 py-12">
@@ -77,19 +85,43 @@ export default function App() {
           </p>
         </header>
 
-        <div className="mt-8">
-          <SearchForm onSearch={handleSearch} isLoading={status === "loading"} />
-        </div>
+        <nav className="mt-8 flex gap-6 border-b border-rule" aria-label="LEAD sections">
+          <button type="button" onClick={() => setTab("leads")} className={tabButtonClass(tab === "leads")}>
+            Find leads
+          </button>
+          <button type="button" onClick={() => setTab("pitch")} className={tabButtonClass(tab === "pitch")}>
+            Chatbot pitch generator
+          </button>
+        </nav>
 
-        <ResultsList
-          status={status}
-          results={results}
-          errorMessage={errorMessage}
-          searchedLocation={searchedLocation}
-          filter={filter}
-          onFilterChange={setFilter}
-          onStatusChange={handleStatusChange}
-        />
+        {tab === "leads" ? (
+          <>
+            <div className="mt-6">
+              <SearchForm onSearch={handleSearch} isLoading={status === "loading"} />
+            </div>
+
+            <ResultsList
+              status={status}
+              results={results}
+              errorMessage={errorMessage}
+              searchedLocation={searchedLocation}
+              filter={filter}
+              onFilterChange={setFilter}
+              onStatusChange={handleStatusChange}
+            />
+          </>
+        ) : (
+          <div className="mt-6">
+            <p className="max-w-2xl text-sm text-ink-soft">
+              For a business that DOES have a website, paste its URL here. LEAD summarizes what
+              they do and drafts a pitch for adding an AI chatbot to their site — so you can
+              follow up with the ones that already have a site, not just the ones that don't.
+            </p>
+            <div className="mt-5">
+              <PitchGenerator />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

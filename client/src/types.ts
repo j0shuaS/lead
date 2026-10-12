@@ -50,3 +50,12 @@ export interface ApiErrorBody {
 
 // The combined "how promising is this lead" filter shown in the UI.
 export type LeadFilter = "all" | "no-website" | "bad-website" | "okay-website" | "good-website";
+
+// Result of the chatbot-pitch generator for a business that DOES have a
+// website — summary of what they do, plus a pitch for adding an AI
+// chatbot, grounded in what's actually on their site.
+export interface PitchResult {
+  url: string;
+  summary: string;
+  pitch: string;
+}
