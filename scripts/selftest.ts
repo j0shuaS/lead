@@ -42,7 +42,10 @@ const byName = (list: Business[], n: string) => list.find((b) => b.name === n)!;
 async function main() {
   const fx = await startFixtures();
   let passed = 0;
-  const ok = (name: string) => console.log(`  ✓ ${name}`) || passed++;
+  const ok = (name: string) => {
+  console.log(`  ✓ ${name}`);
+  passed++;
+};
 
   try {
     console.log('ChamberMaster-style directory, categories + member pages');

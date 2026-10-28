@@ -263,7 +263,7 @@ export async function* crawl(
         yield progress(listing.length + members.length);
       }
 
-      if (stoppedBy === 'cancelled') break;
+      if (signal?.aborted) break;
       if (seedBusinesses === 0 && !opts.followCategories && sawCategoryLinks) {
         yield {
           type: 'log',
