@@ -1,0 +1,31 @@
+{
+  "name": "lead",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Turn public Chamber of Commerce member directories into clean business datasets.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "selftest": "tsx scripts/selftest.ts",
+    "browser:install": "playwright install chromium"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "exceljs": "^4.4.0",
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "robots-parser": "^3.0.1"
+  },
+  "optionalDependencies": {
+    "playwright": "^1.49.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
