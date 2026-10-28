@@ -6,7 +6,7 @@
       "maxDuration": 3600
     },
     "/api/verify": {
-      "maxDuration": 3600
+      "maxDuration": 300
     }
   }
 }

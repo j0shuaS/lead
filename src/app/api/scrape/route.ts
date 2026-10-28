@@ -4,7 +4,7 @@ import type { ScrapeOptions } from '../../../lib/types';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 3600;
+export const maxDuration = 300;
 
 const clamp = (v: unknown, min: number, max: number, dflt: number) => {
   const n = Number(v);

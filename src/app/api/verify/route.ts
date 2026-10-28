@@ -3,7 +3,7 @@ import { PlacesError, verifyBusiness, type VerifyInput, type VerifyOutcome } fro
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
-export const maxDuration = 3600;
+export const maxDuration = 300;
 
 const MAX_PER_REQUEST = 1000;
 const GAP_MS = 150; // ~6 lookups/second, well under Places API limits
